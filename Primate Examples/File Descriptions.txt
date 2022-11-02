@@ -1,0 +1,31 @@
+Files for inclusion
+
+Supplemental Material: Code Related
+
+Link to data used from Primate Dryad
+
+1. QNRSVMwithBootstrap.R
+
+Main program.  Contains info for converting sequence data.  Runs Bootstrap. 
+
+2:  SVMModel_1e+06_1200_0.25_0.75_0.05_0.4_Sept1
+R file containing the SVM model used to estimate networks in all of the Primate Analysis.
+Most can use as is.  Could be replaced if the user prefers to use a self-trained model.
+
+3:  FunctionsParallelBio.R
+This is contains all of the functions required for bootstrapping and running the model.
+User should not need to modify.
+
+
+4 Primate Run Summay
+
+raw data corresponding to QNR-SVM runs for data sets 2,3.  Individual tabs for each
+set.  QNR-SVM returns data based on the sequence indices in R.   Each tab has a dictionary
+for converting between the codes, and the species names.
+
+Primate Data Links
+
+Citation
+Vanderpool, Dan et al. (2020), Supplementary data for: Primate phylogenomics uncovers multiple rapid radiations and ancient interspecific introgression, Dryad, Dataset, https://doi.org/10.5061/dryad.rfj6q577d
+
+as well as supplemental material from the associated paper available: https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000954#sec016
