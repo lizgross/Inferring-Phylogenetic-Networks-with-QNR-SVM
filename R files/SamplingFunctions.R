@@ -226,12 +226,16 @@ S4Cycle_Sampler <- function(lengths = NULL, mn = 0.1, mx =0.2
 
   if (is.null(lengths) == TRUE)
   {
-    lengths <- c(runif(2, mn, mx/2), runif(1, mn, mx), runif(4, mn, mx/2), runif(1, mn, mx))
+    lengths <- c(runif(2, mn, mx/2)
+                 , runif(1, mn, mx)
+                 , runif(5, mn, mx/2))
   }
   sites1 <- floor(gamma1*sites)
-  Tr1 <- paste("((3:", lengths[1]+lengths[2], ", 4:", lengths[3], "):"
-               , (lengths[5])/2,", (2:", lengths[6]+lengths[7], ", 1:"
-               , lengths[8], "):", (lengths[5])/2, ");", sep = "")
+  Tr1 <- paste("(((1:", lengths[8], ", 2:", lengths[6] + lengths[7], "):"
+               , (lengths[5]),", 4:", lengths[3], "):"
+               , lengths[2]/2, ",3:", lengths[1] + lengths[2]/2, ");", sep = "")
+  
+  
   anc <- sample(c(0,1,2,3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
   Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
                       , kappa = 1, sites1, anc.seq = anc)
