@@ -277,7 +277,8 @@ Two3Cycle_Sampler <- function(lengths = NULL, mn = 0.1, mx =0.2
   anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
   Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
                       , kappa = 1, sites2, anc.seq = anc)
-
+  
+####
   sites3 <- floor(alpha[3]*sites)
   Tr3 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
                , "):", (lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
