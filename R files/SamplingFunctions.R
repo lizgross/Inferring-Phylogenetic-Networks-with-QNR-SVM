@@ -250,48 +250,51 @@ Two3Cycle_Sampler <- function(lengths = NULL, mn = 0.1, mx =0.2
                               , sites=100, gamma1=.5,gamma2=.5)
 {
   if (is.null(lengths) == T)
-  {
-    lengths <- c(runif(3, mn, (1/2)*mx), runif(5, mn, (1/3)*mx), runif(3, mn, (1/2)*mx))
+  { lengths <- runif(11, mn, (1/2)*mx)
+    lengths[5:8] <- runif(4, mn, (1/3)*mx)
   }
 
- alpha <- c(gamma1*gamma2,gamma1*(1-gamma2),(1-gamma1)*gamma2,(1-gamma1)*(1-gamma2))
+ alpha <- c(gamma1*gamma2
+            ,gamma1*(1-gamma2)
+            ,(1-gamma1)*gamma2
+            ,(1-gamma1)*(1-gamma2))
   
   config = runif(1)
   
-  if (config < .125) {
+  if (config < 2/3) {
 
   sites1 <- floor(alpha[1]*sites)
   Tr1 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-               , (lengths[5]+lengths[6])/2,", (2:", lengths[7]+lengths[10]
+               , lengths[5]+lengths[6]/2,", (2:", lengths[7]+lengths[10]
                , ", 1:", lengths[8]+lengths[11], "):"
-               , (lengths[5]+lengths[6])/2, ");", sep = "")
+               , lengths[6]/2, ");", sep = "")
   anc <- sample(c(0, 1, 2, 3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
   Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
                       , kappa = 1, sites1, anc.seq = anc)
 
   sites2 <- floor(alpha[2]*sites)
   Tr2 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-               , (lengths[5]+lengths[6]+lengths[8])/2,", (2:"
-               , lengths[9]+lengths[10], ", 1:", lengths[11], "):"
-               , (lengths[5]+lengths[6]+lengths[8])/2, ");", sep = "")
+               , lengths[5]+lengths[6]/2,", (2:", lengths[9]+lengths[10]
+               , ", 1:", lengths[11], "):"
+               , lengths[8] + lengths[6]/2, ");", sep = "")
   anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
   Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
                       , kappa = 1, sites2, anc.seq = anc)
   
-####
   sites3 <- floor(alpha[3]*sites)
-  Tr3 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-               , "):", (lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
-               , lengths[8]+lengths[11], "):", (lengths[6])/2, ");", sep = "")
+  Tr3 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2] + lengths[5], "):"
+               , lengths[6]/2,", (2:", lengths[7]+lengths[10]
+               , ", 1:", lengths[8]+lengths[11], "):"
+               , lengths[6]/2, ");", sep = "")
   anc <- sample(c(0,1,2,3), sites3, c(0.25, 0.25, 0.25, 0.25),replace = TRUE)
   Seq3 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
                       , kappa = 1, sites3, anc.seq = anc)
 
   sites4 <- sites - sites1 - sites2 - sites3
-  Tr4 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-               , "):", (lengths[6]+lengths[8])/2,", (2:", lengths[9]+lengths[10]
-               , ", 1:", lengths[11], "):", (lengths[6]+lengths[8])/2, ");"
-               , sep = "")
+  Tr4 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2] + lengths[5], "):"
+               , lengths[6]/2,", (2:", lengths[9]+lengths[10]
+               , ", 1:", lengths[11], "):"
+               , lengths[8] + lengths[6]/2, ");", sep = "")
   anc <- sample(c(0, 1, 2, 3), sites4, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
   Seq4 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
                       , kappa = 1, sites4, anc.seq = anc)
@@ -301,286 +304,37 @@ Two3Cycle_Sampler <- function(lengths = NULL, mn = 0.1, mx =0.2
     Data_to_Vector(sort(Seq3)) +
     Data_to_Vector(sort(Seq4)) }
   
-  else if (config < .25) {
-    
-    
-    sites1 <- floor(alpha[1]*sites)
-    Tr1 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-                 , (lengths[5]+lengths[6] + lengths[7])/2,", (2:", lengths[10], ", 1:"
-                 , lengths[9]+lengths[11], "):", (lengths[5] + lengths[6]+lengths[7])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites1, anc.seq = anc)
-    
-    sites2 <- floor(alpha[2]*sites)
-    Tr2 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-                 , (lengths[5]+lengths[6]+lengths[8])/2,", (2:"
-                 , lengths[9]+lengths[10], ", 1:", lengths[11], "):"
-                 , (lengths[5]+lengths[6]+lengths[8])/2, ");", sep = "")
-    anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites2, anc.seq = anc)
-    
-    sites3 <- floor(alpha[3]*sites)
-    Tr3 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6]+lengths[7])/2,", (2:", lengths[10], ", 1:"
-                 , lengths[9]+lengths[11], "):", (lengths[6]+lengths[7])/2, ");", sep = "")
-    anc <- sample(c(0,1,2,3), sites3, c(0.25, 0.25, 0.25, 0.25),replace = TRUE)
-    Seq3 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites3, anc.seq = anc)
-    
-    sites4 <- sites - sites1 - sites2 - sites3
-    Tr4 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6]+lengths[8])/2,", (2:", lengths[9]+lengths[10]
-                 , ", 1:", lengths[11], "):", (lengths[6]+lengths[8])/2, ");"
-                 , sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites4, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq4 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites4, anc.seq = anc)
-    
-    Seq <- Data_to_Vector(sort(Seq1)) +
-      Data_to_Vector(sort(Seq2)) +
-      Data_to_Vector(sort(Seq3)) +
-      Data_to_Vector(sort(Seq4)) }
-  
-  else if (config < .375) {
-  
-    sites1 <- floor(alpha[1]*sites)
-    Tr1 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-                 , (lengths[5]+lengths[6]+lengths[7])/2,", (2:", lengths[10], ", 1:"
-                 , lengths[9]+lengths[11], "):", (lengths[5] + lengths[6]+lengths[7])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites1, anc.seq = anc)
  
-    sites2 <- floor(alpha[2]*sites)
-    Tr2 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-                 , (lengths[5]+lengths[6])/2,", (2:", lengths[7]+lengths[10]
-                 , ", 1:", lengths[8]+lengths[11], "):"
-                 , (lengths[5]+lengths[6])/2, ");", sep = "")
-    anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites2, anc.seq = anc)
- 
-    sites3 <- floor(alpha[3]*sites)
-    Tr3 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6]+lengths[7])/2,", (2:", lengths[10], ", 1:"
-                 , lengths[9]+lengths[11], "):", (lengths[6]+lengths[7])/2, ");", sep = "")
-    anc <- sample(c(0,1,2,3), sites3, c(0.25, 0.25, 0.25, 0.25),replace = TRUE)
-    Seq3 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites3, anc.seq = anc)
-    
-    sites4 <- sites - sites1 - sites2 - sites3
-
-    Tr4 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
-                 , lengths[8]+lengths[11], "):", (lengths[6])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites4, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq4 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites4, anc.seq = anc)
-    
-    Seq <- Data_to_Vector(sort(Seq1)) +
-      Data_to_Vector(sort(Seq2)) +
-      Data_to_Vector(sort(Seq3)) +
-      Data_to_Vector(sort(Seq4)) }
-  
-  else if (config < .5) {
-
-    sites1 <- floor(alpha[1]*sites)
-    Tr1 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6]+lengths[8])/2,", (2:", lengths[9]+lengths[10]
-                 , ", 1:", lengths[11], "):", (lengths[6]+lengths[8])/2, ");"
-                 , sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites1, anc.seq = anc)
-
-    sites2 <- floor(alpha[2]*sites)
-    Tr2 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
-                 , lengths[8]+lengths[11], "):", (lengths[6])/2, ");", sep = "")
-    anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites2, anc.seq = anc)
-
-    sites3 <- floor(alpha[3]*sites)
-    Tr3 <- paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                 , "):", (lengths[4]+lengths[6]+lengths[8])/2,", (2:", lengths[9]+lengths[10]
-                 , ", 1:", lengths[11], "):", (lengths[4]+lengths[6]+lengths[8])/2, ");"
-                 , sep = "")
-    anc <- sample(c(0,1,2,3), sites3, c(0.25, 0.25, 0.25, 0.25),replace = TRUE)
-    Seq3 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites3, anc.seq = anc)
-  
-    sites4 <- sites - sites1 - sites2 - sites3
-    Tr4 <- paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                 , "):", (lengths[4]+lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
-                 , lengths[8]+lengths[11], "):", (lengths[4]+lengths[6])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites4, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq4 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites4, anc.seq = anc)
-    
-    Seq <- Data_to_Vector(sort(Seq1)) +
-      Data_to_Vector(sort(Seq2)) +
-      Data_to_Vector(sort(Seq3)) +
-      Data_to_Vector(sort(Seq4)) }
-  
-  else if (config < .625) {
-    
-    sites1 <- floor(alpha[1]*sites)
-    Tr1 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6]+lengths[7])/2,", (2:", lengths[10], ", 1:"
-                 , lengths[9]+lengths[11], "):", (lengths[6]+lengths[7])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites1, anc.seq = anc)
-    
-    sites2 <- floor(alpha[2]*sites)
-    Tr2 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
-                 , lengths[8]+lengths[11], "):", (lengths[6])/2, ");", sep = "")
-    anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites2, anc.seq = anc)
-    
-    sites3 <- floor(alpha[3]*sites)
-    Tr3 <- paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                 , "):", (lengths[4]+lengths[6]+lengths[7])/2,", (2:", lengths[10]
-                 , ", 1:", lengths[9] + lengths[11], "):", (lengths[4]+lengths[6]+lengths[7])/2, ");"
-                 , sep = "")
-    anc <- sample(c(0,1,2,3), sites3, c(0.25, 0.25, 0.25, 0.25),replace = TRUE)
-    Seq3 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites3, anc.seq = anc)
-    
-    sites4 <- sites - sites1 - sites2 - sites3
-    Tr4 <- paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                 , "):", (lengths[4]+lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
-                 , lengths[8]+lengths[11], "):", (lengths[4] +lengths[6])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites4, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq4 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites4, anc.seq = anc)
-    
-    Seq <- Data_to_Vector(sort(Seq1)) +
-      Data_to_Vector(sort(Seq2)) +
-      Data_to_Vector(sort(Seq3)) +
-      Data_to_Vector(sort(Seq4)) }
-  
-  else if (config < .75) {
-    
-    sites1 <- floor(alpha[1]*sites)
-    Tr1 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6]+lengths[7])/2,", (2:", lengths[10], ", 1:"
-                 , lengths[9]+lengths[11], "):", (lengths[6]+lengths[7])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites1, anc.seq = anc)
-    
-    sites2 <- floor(alpha[2]*sites)
-    Tr2 <- paste("((3:", lengths[1]+lengths[4], ", 4:", lengths[2]+lengths[5]
-                 , "):", (lengths[6]+lengths[8])/2,", (2:", lengths[9]+lengths[10]
-                 , ", 1:", lengths[11], "):", (lengths[6]+lengths[8])/2, ");"
-                 , sep = "")
-    anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites2, anc.seq = anc)
-    
-    sites3 <- floor(alpha[3]*sites)
-    Tr3 <- paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                 , "):", (lengths[4]+lengths[6]+lengths[7])/2,", (2:", lengths[10]
-                 , ", 1:", lengths[9] + lengths[11], "):", (lengths[4]+lengths[6]+lengths[7])/2, ");"
-                 , sep = "")
-    anc <- sample(c(0,1,2,3), sites3, c(0.25, 0.25, 0.25, 0.25),replace = TRUE)
-    Seq3 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites3, anc.seq = anc)
-    
-    sites4 <- sites - sites1 - sites2 - sites3
-    Tr4 <-  paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                  , "):", (lengths[4]+lengths[6]+lengths[8])/2,", (2:", lengths[9]+lengths[10]
-                  , ", 1:", lengths[11], "):", (lengths[4]+lengths[6]+lengths[8])/2, ");"
-                  , sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites4, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq4 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites4, anc.seq = anc)
-    
-    Seq <- Data_to_Vector(sort(Seq1)) +
-      Data_to_Vector(sort(Seq2)) +
-      Data_to_Vector(sort(Seq3)) +
-      Data_to_Vector(sort(Seq4)) }
-  
-  else if (config < .875) {
-    
-    sites1 <- floor(alpha[1]*sites)
-    Tr1 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-                 , (lengths[5]+lengths[6] + lengths[7])/2,", (2:", lengths[10], ", 1:"
-                 , lengths[9]+lengths[11], "):", (lengths[5] + lengths[6]+lengths[7])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites1, anc.seq = anc)
-    
-    sites2 <- floor(alpha[2]*sites)
-    Tr2 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-                 , (lengths[5]+lengths[6])/2,", (2:", lengths[7]+lengths[10]
-                 , ", 1:", lengths[8]+lengths[11], "):"
-                 , (lengths[5]+lengths[6])/2, ");", sep = "")
-    anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites2, anc.seq = anc)
-    
-    sites3 <- floor(alpha[3]*sites)
-    Tr3 <- paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                 , "):", (lengths[4]+lengths[6]+lengths[7])/2,", (2:", lengths[10]
-                 , ", 1:", lengths[9] + lengths[11], "):", (lengths[4]+lengths[6]+lengths[7])/2, ");"
-                 , sep = "")
-    anc <- sample(c(0,1,2,3), sites3, c(0.25, 0.25, 0.25, 0.25),replace = TRUE)
-    Seq3 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites3, anc.seq = anc)
-    
-    sites4 <- sites - sites1 - sites2 - sites3
-    Tr4 <-  paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                  , "):", (lengths[4]+lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
-                  , lengths[8]+lengths[11], "):", (lengths[4] + lengths[6])/2, ");", sep = "")
-    anc <- sample(c(0, 1, 2, 3), sites4, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
-    Seq4 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
-                        , kappa = 1, sites4, anc.seq = anc)
-    
-    Seq <- Data_to_Vector(sort(Seq1)) +
-      Data_to_Vector(sort(Seq2)) +
-      Data_to_Vector(sort(Seq3)) +
-      Data_to_Vector(sort(Seq4)) }
-  
    else{
     
     sites1 <- floor(alpha[1]*sites)
-    Tr1 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-                 , (lengths[5]+lengths[6])/2,", (2:", lengths[7]+lengths[10]
-                 , ", 1:", lengths[8]+lengths[11], "):"
-                 , (lengths[5]+lengths[6])/2, ");", sep = "")
+    Tr1 <- paste("(((3:", lengths[1] + lengths[3], ", 4:", lengths[2], "):"
+                 , lengths[5] + lengths[6] + lengths[7],", 2:", lengths[10], "):"
+                 , lengths[9]/2, ",1:", lengths[11] + lengths[9]/2, ");", sep = "")
     anc <- sample(c(0, 1, 2, 3), sites1, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
     Seq1 <- gen.seq.HKY(read.tree(text = Tr1), pi = c(0.25, 0.25, 0.25, 0.25)
                         , kappa = 1, sites1, anc.seq = anc)
     
     sites2 <- floor(alpha[2]*sites)
-    Tr2 <- paste("((3:", lengths[1]+lengths[3], ", 4:", lengths[2], "):"
-                 , (lengths[5]+lengths[6]+lengths[8])/2,", (2:"
-                 , lengths[9]+lengths[10], ", 1:", lengths[11], "):"
-                 , (lengths[5]+lengths[6]+lengths[8])/2, ");", sep = "")
+    Tr2 <- paste("(((3:", lengths[1] + lengths[3], ", 4:", lengths[2], "):"
+                 , lengths[5] + lengths[6] + lengths[8],", 1:", lengths[11], "):"
+                 , lengths[9]/2, ",2:", lengths[10] + lengths[9]/2, ");", sep = "")
     anc <- sample(c(0,1,2,3), sites2, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
     Seq2 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
                         , kappa = 1, sites2, anc.seq = anc)
    
     sites3 <- floor(alpha[3]*sites)
-    Tr3 <- paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                 , "):", (lengths[4]+lengths[6])/2,", (2:", lengths[7]+lengths[10], ", 1:"
-                 , lengths[8]+lengths[11], "):", (lengths[4] + lengths[6])/2, ");", sep = "")
+    Tr3 <- paste("(((3:", lengths[1] + lengths[4], ", 4:", lengths[2] + lengths[5], "):"
+                 , lengths[6] + lengths[7],", 2:", lengths[10], "):"
+                 , lengths[9]/2, ",1:", lengths[11] + lengths[9]/2, ");", sep = "")
     anc <- sample(c(0,1,2,3), sites3, c(0.25, 0.25, 0.25, 0.25),replace = TRUE)
     Seq3 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
                         , kappa = 1, sites3, anc.seq = anc)
     
     sites4 <- sites - sites1 - sites2 - sites3
-    Tr4 <- paste("((3:", lengths[1], ", 4:", lengths[2]+lengths[3]
-                 , "):", (lengths[4]+lengths[6]+lengths[8])/2,", (2:", lengths[9]+lengths[10]
-                 , ", 1:", lengths[11], "):", (lengths[4] + lengths[6]+lengths[8])/2, ");"
-                 , sep = "")
+    Tr4 <- paste("(((3:", lengths[1] + lengths[4], ", 4:", lengths[2] + lengths[5], "):"
+                 , lengths[6] + lengths[8],", 1:", lengths[11], "):"
+                 , lengths[9]/2, ",2:", lengths[10] + lengths[9]/2, ");", sep = "")
     anc <- sample(c(0, 1, 2, 3), sites4, c(0.25, 0.25, 0.25, 0.25), replace = TRUE)
     Seq4 <- gen.seq.HKY(read.tree(text = Tr2), pi = c(0.25, 0.25, 0.25, 0.25)
                         , kappa = 1, sites4, anc.seq = anc)
